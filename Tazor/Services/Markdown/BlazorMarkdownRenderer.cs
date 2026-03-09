@@ -1,6 +1,7 @@
 using Markdig.Syntax;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using Tazor.Services.Markdown;
 public class BlazorMarkdownRenderer
 {
     public RenderFragment Render(MarkdownDocument document) => builder =>
@@ -11,6 +12,12 @@ public class BlazorMarkdownRenderer
             RenderNode(builder, ref seq, node);
         }
     };
+    private readonly CodeRegionRenderer _codeRegionRenderer;
+
+    public BlazorMarkdownRenderer(CodeRegionRenderer codeRegionRenderer)
+    {
+        _codeRegionRenderer = codeRegionRenderer;
+    }
 
     private void RenderNode(RenderTreeBuilder builder, ref int seq, MarkdownObject node)
     {
@@ -43,10 +50,14 @@ public class BlazorMarkdownRenderer
 
                     builder.CloseElement();
                 }
+                
 
                 builder.CloseElement();
                 break;
 
+            case CodeRegionBlock region:
+                _codeRegionRenderer.Render(builder, ref seq, region);
+                break;
 
             // Add more cases as needed (code blocks, images, blockquotes, etc.)
         }

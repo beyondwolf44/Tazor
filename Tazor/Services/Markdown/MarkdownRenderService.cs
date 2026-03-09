@@ -1,13 +1,32 @@
 using Markdig;
+using Markdig.Syntax;
 using Microsoft.AspNetCore.Components;
-public class MarkdownRenderService
-{
-    private readonly MarkdownPipeline _pipeline = MarkdownPipelineFactory.Create();
-    private readonly BlazorMarkdownRenderer _renderer = new();
 
-    public RenderFragment ToRenderFragment(string markdown)
+namespace Tazor.Services.Markdown
+{
+    public class MarkdownRenderService
     {
-        var doc = Markdig.Markdown.Parse(markdown, _pipeline);
-        return _renderer.Render(doc);
+        private readonly MarkdownPipeline _pipeline;
+        private readonly BlazorMarkdownRenderer _renderer;
+
+        public MarkdownRenderService(
+            MarkdownPipeline pipeline,
+            BlazorMarkdownRenderer renderer)
+        {
+            _pipeline = pipeline;
+            _renderer = renderer;
+        }
+
+        public RenderFragment ToRenderFragment(string markdown)
+        {
+            if (string.IsNullOrWhiteSpace(markdown))
+                return builder => { };
+
+            // Parse Markdown into a Markdig AST
+            MarkdownDocument document = Markdig.Markdown.Parse(markdown, _pipeline);
+
+            // Convert AST → Blazor RenderFragment
+            return _renderer.Render(document);
+        }
     }
 }

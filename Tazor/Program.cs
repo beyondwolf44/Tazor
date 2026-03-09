@@ -1,11 +1,25 @@
 using Tazor.Components;
-
+using Tazor.Services.Markdown;
+using Markdig;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+builder.Services.AddSingleton<CodeRegionExtractor>(sp =>
+    new CodeRegionExtractor("../../TestBlazorApp\\Components"));
+
+builder.Services.AddSingleton<CodeRegionRenderer>();
+builder.Services.AddSingleton<BlazorMarkdownRenderer>();
+
+builder.Services.AddSingleton<MarkdownPipeline>(sp =>
+{
+    var regionRenderer = sp.GetRequiredService<CodeRegionRenderer>();
+    return MarkdownPipelineFactory.Create(regionRenderer);
+});
+
 builder.Services.AddSingleton<MarkdownRenderService>();
+
 
 var app = builder.Build();
 

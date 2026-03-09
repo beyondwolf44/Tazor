@@ -1,0 +1,22 @@
+@page "/md-region-test"
+@using Tazor.Services.Markdown
+
+@inject MarkdownRenderService MarkdownService
+
+<h3>Markdown Region Test</h3>
+
+<div class="markdown-body">
+    @if (Content != null)
+    {
+        @MarkdownService.ToRenderFragment(Content)
+    }
+</div>
+
+@code {
+    private string? Content;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Content = System.IO.File.ReadAllText("wwwroot/test/region-test.md");
+    }
+}
