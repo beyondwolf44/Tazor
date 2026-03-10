@@ -1,5 +1,7 @@
+using Markdig.Syntax;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using Tazor.Components;
 namespace Tazor.Services.Markdown
 {
     public class CodeRegionRenderer
@@ -27,6 +29,17 @@ namespace Tazor.Services.Markdown
 
             builder.CloseElement(); // code
             builder.CloseElement(); // pre
+
         }
+        public RenderFragment Render(CodeRegionBlock region) => builder =>
+        {
+            var seq = 0;
+
+            builder.OpenComponent<CodeBlockView>(seq++);
+            builder.AddAttribute(seq++, "Code", region.Code);
+            builder.AddAttribute(seq++, "Language", region.Language);
+            builder.AddAttribute(seq++, "Title", region.Title);
+            builder.CloseComponent();
+        };
     }
 }

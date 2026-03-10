@@ -1,0 +1,21 @@
+@page "/markdown-test"
+@using Tazor.Services.Markdown;
+@inject BlazorMarkdownRenderer MarkdownRenderer
+@inject Markdig.MarkdownPipeline Pipeline
+<div>
+    @if (Document != null)
+    {
+        @MarkdownRenderer.Render(Document)
+    }
+</div>
+
+✅ This way, you reuse
+@code {
+    private Markdig.Syntax.MarkdownDocument? Document;
+
+    protected override void OnInitialized()
+    {
+        var markdown = System.IO.File.ReadAllText("wwwroot/Test/region-test.md");
+        Document = Markdig.Markdown.Parse(markdown, Pipeline);
+    }
+}

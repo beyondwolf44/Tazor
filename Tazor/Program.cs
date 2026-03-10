@@ -15,7 +15,8 @@ builder.Services.AddSingleton<BlazorMarkdownRenderer>();
 builder.Services.AddSingleton<MarkdownPipeline>(sp =>
 {
     var regionRenderer = sp.GetRequiredService<CodeRegionRenderer>();
-    return MarkdownPipelineFactory.Create(regionRenderer);
+    var regionExtractor = sp.GetRequiredService<CodeRegionExtractor>();
+    return MarkdownPipelineFactory.Create(regionRenderer, regionExtractor);
 });
 
 builder.Services.AddSingleton<MarkdownRenderService>();

@@ -1,0 +1,24 @@
+
+<div style="background-color:#808080">
+    <h3>@Title</h3>
+    <div id="block">
+        <pre class="code-block">
+            <code  class="@Language">
+        @Code
+            </code>
+        </pre>
+    </div>
+</div>
+<style>
+    #block {
+    border-radius: 25px;
+    border: 2px solid #04AA6D;
+    background-color: white;
+    padding: 20px; 
+    }
+</style>
+@code {
+    [Parameter] public string Code { get; set; } = "";
+    [Parameter] public string? Language { get; set; }
+    [Parameter] public string? Title { get; set; }
+}
